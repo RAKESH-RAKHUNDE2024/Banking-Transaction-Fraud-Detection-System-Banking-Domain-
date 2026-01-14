@@ -135,4 +135,5 @@ Approach (Step By Step Workflow)
 
 ### Conclusion
 
-This Project Demonstrates A Complete Machine Learning Workflow For Banking/UPI Fraud Detection, Including Data Preparation, Feature Engineering, Model Training, And Interactive Deployment. The Final Output Supports Fraud Risk Identification With Probability Scoring, Enabling Effective Monitoring And Decision-making.
+This Project Demonstrates A Complete Machine Learning Workflow For Banking/UPI Fraud Detection, Including Data Preparation, Feature Engineering, Model Training, And Interactive Deployment. The Final Output Supports Fraud Risk Identification With Probability Scoring, Enabling Effective Monitoring And Decision Making.
+
