@@ -4,3 +4,10 @@ scikit-learn
 joblib
 streamlit
 python-dotenv
+fastapi
+uvicorn
+pydantic
+jinja2
+python-multipart
+
+
