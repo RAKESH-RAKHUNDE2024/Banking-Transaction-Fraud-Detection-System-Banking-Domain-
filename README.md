@@ -1,23 +1,52 @@
-# Banking Transactional Fraud Detection (ML + Streamlit App)
+# Banking Transactional Fraud Detection Platform (ML + FastAPI Website)
 
 ## Summary
-This Repository Contains An End To End Machine Learning Project For Detecting Fraudulent Banking/UPI Transactions Using Transaction Behavior Patterns, Device And Network Signals, And Customer Attributes. The Solution Includes Data Preprocessing, Feature Engineering, Model Training Pipeline, And A Streamlit Based Web Application For Real Time Fraud Prediction With Probability Output.
+This Project Is An End To End Machine Learning Solution To Detect Fraudulent Banking/UPI Transactions Using Transaction Behavior, Device/Network Signals, And Customer Attributes. It Includes A Complete Training Pipeline, Real Time Fraud Scoring, Batch CSV Fraud Detection, Prediction History Tracking, And A Premium Multi Page FastAPI Website UI For Industry Style Deployment.
 
 ---
 
 ## Objective
-The Primary Objective Of This Project Is To Build A Fraud Detection Model That Can:
-- Classify Transactions As **Fraud (1)** Or **Non-Fraud (0)**
-- Provide A **fraud probability score** For Each Transaction
-- Support Real Time Prediction Through An Interactive Streamlit User Interface
+The Main Objective Of This Project Is To Build A Production Ready Fraud Detection System That Can:
+
+- Predict Whether A Transaction Is **FRAUD** Or **NORMAL**
+- Provide A **Fraud Probability Score** (`0.0 → 1.0`)
+- Display An **Industry Level Web Interface** With Risk Meter And Risk Badges
+- Support **Batch Fraud Prediction Via CSV Upload**
+- Generate A Downloadable Output File For Business Usage
+- Maintain **Prediction History Logs** For Monitoring And Analytics
+
+---
+
+## Key Features (Industry Level)
+**Real Time Fraud Prediction (Single Transaction)**
+- Input Transaction Details Via Website Form
+- Get Fraud Prediction + Probability Score Instantly
+
+**Risk Level Classification**
+- LOW / MEDIUM / HIGH Risk Bucket Based On Probability Score
+- Risk Meter Progress Bar And Color Badges
+
+**Batch Upload Fraud Prediction**
+- Upload CSV Transactions File
+- Generate Predictions For All Records
+- Download Output CSV With Fraud Scores
+
+**Prediction History Tracking**
+- Stores Latest Prediction Logs Automatically
+- View Recent Predictions In History Page
+
+**Dashboard Analytics**
+- Displays Prediction Summary Counts (Total Predictions, Fraud Count, Fraud %)
+- Shows Top Fraud Patterns Based On Logged History
 
 ---
 
 ## Dataset Overview
-The Model Is Trained On A Transaction Dataset With Approximately **2,00,000 Records** And The Following Key Features:
+The Model Is Trained On A Transaction Dataset With Approximately **250,000 Records**.  
+Key Columns Used For Training/Prediction Include:
 
 - `transaction_type` (P2P, P2M, Bill Payment, Recharge)
-- `merchant_category` (Grocery, Fuel, Shopping, etc.)
+- `merchant_category` (Grocery, Fuel, Shopping, Etc.)
 - `amount_inr`
 - `transaction_status` (SUCCESS, FAILED)
 - `sender_age_group`, `receiver_age_group`
@@ -31,13 +60,16 @@ The Model Is Trained On A Transaction Dataset With Approximately **2,00,000 Reco
 ---
 
 ## Tools & Technologies Used
-- **Python** (Project Development)
-- **Pandas / NumPy** (Data Processing And Feature Engineering)
-- **Scikit-learn** (Model Training, Evaluation, Preprocessing Pipeline)
-- **Joblib** (Model Serialization And Loading)
-- **Streamlit** (Web Application For Prediction)
-- **GitHub** (Version Control And Repository Hosting)
-- **Render** *(Planned Deployment)* (Cloud Hosting For Streamlit App)
+- **Python**
+- **Pandas / NumPy** (Data Processing, Feature Engineering)
+- **Scikit-learn** (ML Model Training & Evaluation)
+- **Joblib** (Model Persistence)
+- **FastAPI** (Backend Web Framework + Routing)
+- **Jinja2 Templates** (Multi Page Website Rendering)
+- **HTML/CSS** (Premium UI And Layout)
+- **Uvicorn** (ASGI Server)
+- **GitHub** (Project Hosting & Versioning)
+- **Render** (Deployment Ready)
 
 ---
 
@@ -45,95 +77,106 @@ The Model Is Trained On A Transaction Dataset With Approximately **2,00,000 Reco
 ```bash
 Fraud_Transactions_ML/
 │
-├── streamlit_app.py              # Streamlit UI For Fraud Prediction
-├── run_training.py               # Pipeline Runner (Training Entry Point)
-├── requirements.txt              # Python Dependencies
-├── README.md                     # Project Documentation
+├── web_app.py                     # FastAPI Website (Prediction + Batch + Dashboard + History)
+├── streamlit_app.py               # Streamlit Prediction App 
+├── run_training.py                # Model Training Entry Point
+├── requirements.txt               # Dependencies
+├── README.md                      # Documentation
+├── check.model                    # Trained Model File
 │
-└── transaction/
-    ├── components/               # Data Ingestion, Transformation, Training
-    ├── pipeline/                 # Training Pipeline Orchestration
-    ├── prediction/               # Prediction Pipeline Used By Streamlit
-    ├── config.py                 # Configurations And Paths
-    ├── utils.py                  # Utility Helpers (Load/Save Objects)
-    ├── logger.py                 # Logging Setup
-    └── exception.py              # Custom Exception Handling
+├── templates/                     # Website Pages
+│   ├── base.html
+│   ├── index.html
+│   ├── batch.html
+│   ├── dashboard.html
+│   └── history.html
+│
+├── static/                        # Website Assets
+│   └── style.css
+│
+├── outputs/                       # Batch Prediction Outputs (Auto Created)
+│   └── batch_predictions_output.csv
+│
+├── logs/                          # Prediction History Logs (Auto Created)
+│   └── prediction_history.csv
+│
+└── transaction/                   # ML Pipeline Package
+    ├── components/
+    ├── pipeline/
+    ├── prediction/
+    └── ...
 ```
 
-Approach (Step By Step Workflow)
-### 1. Data Understanding & EDA
+### Ml Workflow (End To End)
+#### 1) Data Understanding & EDA
 
-- Performed Exploratory Analysis To Understand:
+- Distribution Analysis
 
-- Fraud Distribution And Imbalance
+- Fraud Patterns Across Categories And Transaction Types
 
-- Fraud Patterns Across Merchant Categories And Transaction Types
+- Device/Network Risk Signals
 
-- Behavioral Trends Based On Time, Device Type, And Network Type
+- Time Based Fraud Trends
 
-### 2. Data Cleaning & Preprocessing
+#### 2) Data Cleaning & Preprocessing
 
-#### Key Preprocessing Tasks:
+- Standardized Columns
 
-- Standardized Column Names For Consistent Processing
+- Categorical Encoding Via Pipeline
 
-- Handled Categorical Features Using Encoding Strategies
+- Numeric Scaling/Transformations
 
-- Scaled Numeric Features Such As Transaction Amount And Time Features
+#### 3) Feature Engineering
 
-### 3. Feature Engineering
+##### Additional Engineered Features:
 
-- Additional Features Were Created To Improve Fraud Detection:
+- amount_log = Log Transformed Transaction Amount
 
-- amount_log = Log-transformed Transaction Amount
+- same_bank_transfer = Sender And Receiver Bank Match (0/1)
 
-- same_bank_transfer = Sender And Receiver Bank Match Flag
+- is_night = Transaction Occurred During Night Hours (0/1)
 
-- is_night = Whether Transaction Occurred During Night Hours
+#### 4) Model Training & Evaluation
 
-### 4. Model Training & Evaluation
+- ML Pipeline Training + Evaluation
 
-- Built A Supervised Ml Pipeline Using Preprocessing + Classification Model
-
-- Evaluated Using Fraud-relevant Metrics Such As:
+- Metrics Used For Fraud Performance:
 
 - Precision
 
 - Recall
 
-- F1 Score
+- F1-Score
 
-- ROC-AUC (Where Applicable)
+- ROC-AUC(Where Applicable)
 
-### 5. Streamlit Deployment (Prediction App)
+#### 5) Deployment Ready Website
 
-- Developed A Streamlit Interface To:
+- FastAPI UI With Prediction + Batch + Dashboard
 
-- Accept Transaction Details As Input
+- Clean UI With Industry Style Theme
 
-- Predict Fraud/Non Fraud Output
+### Results & Findings
 
-- Show Fraud Probability Score For Better Decision Support
+- Fraud Behavior Shows Strong Influence From Transaction Type, Category, Amount Patterns, And Time Of Transaction.
 
-### Key Findings (Insights)
+- Device Type And Network Signals Provide Useful Fraud Indicators For Anomaly Detection.
 
-- Transaction Amount And Time Based Features Contribute Strongly To Fraud Prediction.
+- Feature Engineering (amount_log, is_night, same_bank_transfer) Improves Model Scoring Stability.
 
-- Certain Transaction Types And Merchant Categories May Show Higher Fraud Exposure.
-
-- Device And Network Indicators Provide Useful Signals For Abnormal Transaction Behavior.
-
-### Results
-
-### The System Provides:
-
-- Binary Fraud Classification (fraud_flag)
-
-- Fraud Probability Score (predict_proba)
-
-- Real Time Prediction Through Streamlit UI
 
 ### Conclusion
 
-This Project Demonstrates A Complete Machine Learning Workflow For Banking/UPI Fraud Detection, Including Data Preparation, Feature Engineering, Model Training, And Interactive Deployment. The Final Output Supports Fraud Risk Identification With Probability Scoring, Enabling Effective Monitoring And Decision Making.
+- This Project Demonstrates A Complete Industry Style ML Solution For Banking Transaction Fraud Detection, Including:
 
+- Data Preprocessing & Feature Engineering
+
+- ML Training Pipeline And Model Creation
+
+- Real Time Fraud Scoring With Probability
+
+- Premium FastAPI Website UI
+
+- Batch Processing Support And Downloadable Results
+
+- Logging & Dashboard Analytics For Monitoring
