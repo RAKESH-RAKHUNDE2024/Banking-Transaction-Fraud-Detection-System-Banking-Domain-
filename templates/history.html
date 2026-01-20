@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="page-title">Prediction History</h1>
+<p class="page-subtitle">Latest fraud predictions logged in real time.</p>
+
+<div class="card">
+  <h3>Recent Predictions</h3>
+
+  {% if rows %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Type</th>
+          <th>Category</th>
+          <th>Amount</th>
+          <th>Prediction</th>
+          <th>Probability</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in rows %}
+        <tr>
+          <td>{{ r["timestamp"] }}</td>
+          <td>{{ r["transaction_type"] }}</td>
+          <td>{{ r["merchant_category"] }}</td>
+          <td>{{ r["amount_inr"] }}</td>
+          <td>{{ r["label"] }}</td>
+          <td>{{ r["fraud_probability"] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="small">No prediction logs found yet. Run a prediction first.</p>
+  {% endif %}
+
+</div>
+
+{% endblock %}

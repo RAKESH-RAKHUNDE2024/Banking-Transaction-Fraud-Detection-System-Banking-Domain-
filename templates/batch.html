@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="page-title">Batch Upload</h1>
+<p class="page-subtitle">Upload a CSV file and generate fraud predictions for all rows.</p>
+
+<div class="card">
+  <h3>Upload Transactions CSV</h3>
+
+  <form method="POST" action="/batch-predict" enctype="multipart/form-data">
+    <label>Select CSV File</label>
+    <input type="file" name="file" accept=".csv" required />
+    <button class="btn" type="submit">Run Batch Prediction</button>
+  </form>
+
+  {% if batch_message %}
+    <div class="result-card" style="margin-top:16px;">
+      <p>{{ batch_message }}</p>
+      {% if download_link %}
+        <a class="link-btn" href="{{ download_link }}">Download Output CSV</a>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}
