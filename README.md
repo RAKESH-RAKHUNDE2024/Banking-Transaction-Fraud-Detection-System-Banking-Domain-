@@ -146,7 +146,7 @@ fraud-transactions-ml/
         └── prediction_pipeline.py
 ```
 
-### Website Features
+## Website Features
 
 - Prediction UI (Real Time Fraud Scoring)
 - Batch Upload & CSV Download
@@ -155,13 +155,13 @@ fraud-transactions-ml/
 - Download History As CSV
 - Login / Logout Support
 
-### MySQL Integration
+## MySQL Integration
 
 All Predictions Are Stored In MySQL In A Table:
 
 #### - Prediction_Logs
 
-#### This Table Stores:
+### This Table Stores:
 
 - Transaction_Id (Auto Generated)
 - Transaction Features
@@ -170,22 +170,22 @@ All Predictions Are Stored In MySQL In A Table:
 - Risk_Level
 - Timestamp
 
-### Dashboard Filters Supported
+## Dashboard Filters Supported
 
-#### Dashboard supports filtering by:
+### Dashboard supports filtering by:
 
 - Date Range (start_date / end_date)
 - Transaction Type (ALL / P2P / P2M / Bill Payment / Recharge)
 - Fraud Filter (ALL / FRAUD / NORMAL)
 
-#### Charts Included:
+## Charts Included:
 
 - Transactions By Type
 - Merchant Category Distribution
 - Fraud Probability Trend (Last N Predictions)
 
-### Results & Findings
-#### This Project Successfully Demonstrated:
+## Results & Findings
+### This Project Successfully Demonstrated:
 
 - Fraud Probability Scoring For Real Time Decisioning
 - Behavioral Signals Detection (Night txn, Failed txn, High Amount)
@@ -193,16 +193,17 @@ All Predictions Are Stored In MySQL In A Table:
 - UI Based Fraud Analytics With Filters And Export
 - Production Style FastAPI + ML + DB Integration
 
-### Conclusion
+## Conclusion
 
 - This End To End System Provides A Strong Foundation For Building Fraud Detection Products In A Real Banking/Fintech Environment.
 - With Real Time Prediction Support, Batch Scoring, And Dashboard Monitoring, It Aligns Well With Industry Workflows
 - Such As Fraud Screening, Transaction Monitoring, And Investigation Support.
 
 
-### Author
+## Author
 
 **Rakesh N. Rakhunde**
 - **Data Analyst | Data Engineer | ML Enthusiast**
 - **End To End Fraud Detection Project (UPI + Banking)**
+
 
