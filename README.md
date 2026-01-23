@@ -1,182 +1,207 @@
-# Banking Transactional Fraud Detection Platform (ML + FastAPI Website)
+# Banking Transactional Fraud Detection (ML + Web App)
 
-## Summary
-This Project Is An End To End Machine Learning Solution To Detect Fraudulent Banking/UPI Transactions Using Transaction Behavior, Device/Network Signals, And Customer Attributes. It Includes A Complete Training Pipeline, Real Time Fraud Scoring, Batch CSV Fraud Detection, Prediction History Tracking, And A Premium Multi Page FastAPI Website UI For Industry Style Deployment.
+A Complete End To End Machine Learning Project To Detect Fraudulent Banking/UPI Transactions Using Transaction Behavior, Device/Network Signals, And Customer Attributes.  
+This Project Includes A Full ML Training Pipeline, Batch Prediction Support, A Modern Streamlit App, And An Industry Style FastAPI Website With Authentication, MySQL Logging, Dashboard Analytics, And History Export.
+
+---
+
+## Project Summary
+
+Fraudulent Banking And UPI Transactions Are Increasing Due To Fast Digital Adoption And Complex Customer Behavior Patterns.  
+This Project Helps Identify Suspicious Transactions Using Historical Transaction Patterns And Behavioral Signals Such As:
+
+- Transaction Type And Merchant Category
+- Transaction Amount And Status
+- Sender/Receiver Demographics (Age Group, State, Bank)
+- Device Type And Network Type
+- Time-based Signals (Hour, Weekday, Weekend)
+
+The Model Predicts Whether A Transaction Is Likely **FRAUD** Or **NORMAL**, And Provides A **Fraud Probability Score** For Real Time Decision Making.
 
 ---
 
 ## Objective
-The Main Objective Of This Project Is To Build A Production Ready Fraud Detection System That Can:
 
-- Predict Whether A Transaction Is **FRAUD** Or **NORMAL**
-- Provide A **Fraud Probability Score** (`0.0 → 1.0`)
-- Display An **Industry Level Web Interface** With Risk Meter And Risk Badges
-- Support **Batch Fraud Prediction Via CSV Upload**
-- Generate A Downloadable Output File For Business Usage
-- Maintain **Prediction History Logs** For Monitoring And Analytics
+Build A Production Style Fraud Detection System That Supports:
 
----
-
-## Key Features (Industry Level)
-**Real Time Fraud Prediction (Single Transaction)**
-- Input Transaction Details Via Website Form
-- Get Fraud Prediction + Probability Score Instantly
-
-**Risk Level Classification**
-- LOW / MEDIUM / HIGH Risk Bucket Based On Probability Score
-- Risk Meter Progress Bar And Color Badges
-
-**Batch Upload Fraud Prediction**
-- Upload CSV Transactions File
-- Generate Predictions For All Records
-- Download Output CSV With Fraud Scores
-
-**Prediction History Tracking**
-- Stores Latest Prediction Logs Automatically
-- View Recent Predictions In History Page
-
-**Dashboard Analytics**
-- Displays Prediction Summary Counts (Total Predictions, Fraud Count, Fraud %)
-- Shows Top Fraud Patterns Based On Logged History
+- Data Preprocessing + Feature Engineering  
+- Model Training Pipeline (Artifacts + Logs + Saved Model)  
+- Single Transaction Fraud Prediction (Real Time UI)  
+- Batch Prediction Using CSV Upload  
+- Fraud Analytics Dashboard (Filters + Plotly Charts)  
+- Prediction History Stored In MySQL Database  
+- CSV Export For Prediction Logs  
+- Secure Login/Logout System Using JWT Cookies  
+- Deploy Ready Structure For Render Cloud
 
 ---
 
-## Dataset Overview
-The Model Is Trained On A Transaction Dataset With Approximately **250,000 Records**.  
-Key Columns Used For Training/Prediction Include:
+## Dataset Information
 
+**File:** `transactions.csv`  
+**Rows:** 250,000  
+
+### Key Columns
+
+- `transaction_id`
+- `timestamp`
 - `transaction_type` (P2P, P2M, Bill Payment, Recharge)
-- `merchant_category` (Grocery, Fuel, Shopping, Etc.)
+- `merchant_category` (Food, Grocery, Fuel, Shopping, etc.)
 - `amount_inr`
-- `transaction_status` (SUCCESS, FAILED)
+- `transaction_status` (SUCCESS / FAILED)
 - `sender_age_group`, `receiver_age_group`
 - `sender_state`
 - `sender_bank`, `receiver_bank`
 - `device_type` (Android, iOS, Web)
 - `network_type` (3G, 4G, 5G, WiFi)
-- `hour_of_day`, `day_of_week`, `is_weekend`
-- Target: `fraud_flag` (0/1)
+- `fraud_flag` (Target)
+- Time Engineered Columns: `hour_of_day`, `day_of_week`, `is_weekend`
+
+---
+
+## Feature Engineering Used
+
+The Following Engineered Features Were Generated For Improved Fraud Detection Accuracy:
+
+- `amount_log = log1p(amount_inr)`
+- `same_bank_transfer = (sender_bank == receiver_bank)`
+- `is_night = 1 if hour_of_day between 00 to 06 else 0`
 
 ---
 
 ## Tools & Technologies Used
-- **Python**
-- **Pandas / NumPy** (Data Processing, Feature Engineering)
-- **Scikit-learn** (ML Model Training & Evaluation)
-- **Joblib** (Model Persistence)
-- **FastAPI** (Backend Web Framework + Routing)
-- **Jinja2 Templates** (Multi Page Website Rendering)
-- **HTML/CSS** (Premium UI And Layout)
-- **Uvicorn** (ASGI Server)
-- **GitHub** (Project Hosting & Versioning)
-- **Render** (Deployment Ready)
+
+### Programming & Libraries
+- Python
+- Pandas, NumPy
+- Scikit Learn
+- Joblib
+- Plotly (Dashboard Charts)
+
+### Deployment & Web
+- Streamlit (ML Prediction App)
+- FastAPI (Website + API Layer)
+- Jinja2 Templates (HTML UI)
+- CSS (Modern Multicolor UI Styling)
+- Uvicorn (ASGI Server)
+
+### Database
+- MySQL (Prediction Logs Storage)
+- SQLAlchemy ORM
 
 ---
 
-## Project Structure
+## Project Folder Structure
+
 ```bash
-Fraud_Transactions_ML/
+fraud-transactions-ml/
 │
-├── web_app.py                     # FastAPI Website (Prediction + Batch + Dashboard + History)
-├── streamlit_app.py               # Streamlit Prediction App 
-├── run_training.py                # Model Training Entry Point
-├── requirements.txt               # Dependencies
-├── README.md                      # Documentation
-├── check.model                    # Trained Model File
+├── .env
+├── .gitignore
+├── README.md
+├── requirements.txt
+├── check.model
+├── transactions.csv
+├── streamlit_app.py
+├── web_app.py
 │
-├── templates/                     # Website Pages
+├── notebook/
+│   └── EDA_transaction.ipynb
+│
+├── templates/
 │   ├── base.html
 │   ├── index.html
 │   ├── batch.html
-│   ├── dashboard.html
-│   └── history.html
+│   ├── dashboard_filters.html
+│   ├── history.html
+│   └── login.html
 │
-├── static/                        # Website Assets
+├── static/
 │   └── style.css
 │
-├── outputs/                       # Batch Prediction Outputs (Auto Created)
-│   └── batch_predictions_output.csv
+├── outputs/
+│   ├── batch_predictions_output.csv
+│   └── prediction_history_export.csv
 │
-├── logs/                          # Prediction History Logs (Auto Created)
-│   └── prediction_history.csv
-│
-└── transaction/                   # ML Pipeline Package
+└── transaction/
+    ├── __init__.py
+    ├── config.py
+    ├── exception.py
+    ├── logger.py
+    ├── utils.py
+    │
+    ├── entity/
+    │   └── artifact_entity.py
+    │
     ├── components/
+    │   ├── data_ingestion.py
+    │   ├── data_transformation.py
+    │   ├── model_trainer.py
+    │   └── model_evaluation.py
+    │
     ├── pipeline/
-    ├── prediction/
-    └── ...
+    │   └── training_pipeline.py
+    │
+    └── prediction/
+        └── prediction_pipeline.py
 ```
 
-### Ml Workflow (End To End)
-#### 1) Data Understanding & EDA
+### Website Features
 
-- Distribution Analysis
+- Prediction UI (Real Time Fraud Scoring)
+- Batch Upload & CSV Download
+- Analytics Dashboard (Filters + Charts)
+- History Tab With MySQL Stored Logs
+- Download History As CSV
+- Login / Logout Support
 
-- Fraud Patterns Across Categories And Transaction Types
+### MySQL Integration
 
-- Device/Network Risk Signals
+All Predictions Are Stored In MySQL In A Table:
 
-- Time Based Fraud Trends
+#### - Prediction_Logs
 
-#### 2) Data Cleaning & Preprocessing
+#### This Table Stores:
 
-- Standardized Columns
+- Transaction_Id (Auto Generated)
+- Transaction Features
+- Label (FRAUD/ NORMAL)
+- Fraud_probability
+- Risk_Level
+- Timestamp
 
-- Categorical Encoding Via Pipeline
+### Dashboard Filters Supported
 
-- Numeric Scaling/Transformations
+#### Dashboard supports filtering by:
 
-#### 3) Feature Engineering
+- Date Range (start_date / end_date)
+- Transaction Type (ALL / P2P / P2M / Bill Payment / Recharge)
+- Fraud Filter (ALL / FRAUD / NORMAL)
 
-##### Additional Engineered Features:
+#### Charts Included:
 
-- amount_log = Log Transformed Transaction Amount
-
-- same_bank_transfer = Sender And Receiver Bank Match (0/1)
-
-- is_night = Transaction Occurred During Night Hours (0/1)
-
-#### 4) Model Training & Evaluation
-
-- ML Pipeline Training + Evaluation
-
-- Metrics Used For Fraud Performance:
-
-- Precision
-
-- Recall
-
-- F1-Score
-
-- ROC-AUC(Where Applicable)
-
-#### 5) Deployment Ready Website
-
-- FastAPI UI With Prediction + Batch + Dashboard
-
-- Clean UI With Industry Style Theme
+- Transactions By Type
+- Merchant Category Distribution
+- Fraud Probability Trend (Last N Predictions)
 
 ### Results & Findings
+#### This Project Successfully Demonstrated:
 
-- Fraud Behavior Shows Strong Influence From Transaction Type, Category, Amount Patterns, And Time Of Transaction.
-
-- Device Type And Network Signals Provide Useful Fraud Indicators For Anomaly Detection.
-
-- Feature Engineering (amount_log, is_night, same_bank_transfer) Improves Model Scoring Stability.
-
+- Fraud Probability Scoring For Real Time Decisioning
+- Behavioral Signals Detection (Night txn, Failed txn, High Amount)
+- Logging System For Audit & Monitoring
+- UI Based Fraud Analytics With Filters And Export
+- Production Style FastAPI + ML + DB Integration
 
 ### Conclusion
 
-- This Project Demonstrates A Complete Industry Style ML Solution For Banking Transaction Fraud Detection, Including:
+- This End To End System Provides A Strong Foundation For Building Fraud Detection Products In A Real Banking/Fintech Environment.
+- With Real Time Prediction Support, Batch Scoring, And Dashboard Monitoring, It Aligns Well With Industry Workflows
+- Such As Fraud Screening, Transaction Monitoring, And Investigation Support.
 
-- Data Preprocessing & Feature Engineering
 
-- ML Training Pipeline And Model Creation
+### Author
 
-- Real Time Fraud Scoring With Probability
-
-- Premium FastAPI Website UI
-
-- Batch Processing Support And Downloadable Results
-
-- Logging & Dashboard Analytics For Monitoring
+**Rakesh N. Rakhunde**
+- **Data Analyst | Data Engineer | ML Enthusiast**
+- **End To End Fraud Detection Project (UPI + Banking)**
