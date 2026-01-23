@@ -10,10 +10,10 @@ class PredictionPipeline:
     def predict(self, input_dict: dict):
         df = pd.DataFrame([input_dict])
 
-        # same cleaning
+        # Same Cleaning
         df.columns = [c.strip().lower().replace(" ", "_").replace("(inr)", "inr") for c in df.columns]
 
-        # remove timestamp if not included
+        # Remove Timestamp If Not Included
         if "transaction_id" in df.columns:
             df = df.drop(columns=["transaction_id"])
 
