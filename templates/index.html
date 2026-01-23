@@ -2,166 +2,183 @@
 {% block content %}
 
 <h1 class="page-title">Fraud Prediction</h1>
-<p class="page-subtitle">Real-time transaction risk scoring using ML model.</p>
+<p class="page-subtitle">Smart Fraud Detection With Real Time Scoring, Alerts, And Risk Insights.</p>
 
 <div class="grid-2">
 
-  <div class="card">
-    <h3>Transaction Input</h3>
+<!-- LEFT: INPUT FORM -->
+<div class="card">
+  <h3>Transaction Input</h3>
 
-    <form method="POST" action="/predict-ui">
+  <form method="POST" action="/predict-ui">
+    <div class="form-grid">
 
-      <div class="form-grid">
+      <!-- Transaction ID (NEW + Correct Place) -->
 
-        <div>
-          <label>Transaction Type</label>
-          <select name="transaction_type">
-            {% for x in transaction_types %}
+      <div>
+        <label>Transaction Type</label>
+        <select name="transaction_type">
+          {% for x in transaction_types %}
             <option value="{{x}}">{{x}}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div>
-          <label>Merchant Category</label>
-          <select name="merchant_category">
-            {% for x in merchant_categories %}
-            <option value="{{x}}">{{x}}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div>
-          <label>Amount (INR)</label>
-          <input type="number" name="amount_inr" value="500" min="1"/>
-        </div>
-
-        <div>
-          <label>Transaction Status</label>
-          <select name="transaction_status">
-            {% for x in transaction_status %}
-            <option value="{{x}}">{{x}}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div>
-          <label>Sender Age Group</label>
-          <select name="sender_age_group">
-            {% for x in age_groups %}
-            <option value="{{x}}">{{x}}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div>
-          <label>Receiver Age Group</label>
-          <select name="receiver_age_group">
-            {% for x in age_groups %}
-            <option value="{{x}}">{{x}}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div>
-          <label>Sender State</label>
-          <select name="sender_state">
-            {% for x in sender_states %}
-            <option value="{{x}}">{{x}}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div>
-          <label>Sender Bank</label>
-          <select name="sender_bank">
-            {% for x in banks %}
-            <option value="{{x}}">{{x}}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div>
-          <label>Receiver Bank</label>
-          <select name="receiver_bank">
-            {% for x in banks %}
-            <option value="{{x}}">{{x}}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div>
-          <label>Device Type</label>
-          <select name="device_type">
-            {% for x in device_types %}
-            <option value="{{x}}">{{x}}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div>
-          <label>Network Type</label>
-          <select name="network_type">
-            {% for x in network_types %}
-            <option value="{{x}}">{{x}}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div>
-          <label>Hour of Day</label>
-          <input type="number" name="hour_of_day" value="12" min="0" max="23"/>
-        </div>
-
-        <div>
-          <label>Day of Week</label>
-          <select name="day_of_week">
-            {% for x in days %}
-            <option value="{{x}}">{{x}}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div>
-          <label>Is Weekend?</label>
-          <select name="is_weekend">
-            <option value="0">0</option>
-            <option value="1">1</option>
-          </select>
-        </div>
-
+          {% endfor %}
+        </select>
       </div>
 
-      <button class="btn" type="submit">Predict Fraud</button>
-    </form>
-  </div>
+      <div>
+        <label>Merchant Category</label>
+        <select name="merchant_category">
+          {% for x in merchant_categories %}
+            <option value="{{x}}">{{x}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label>Amount (INR)</label>
+        <input type="number" name="amount_inr" value="500" min="1" required>
+      </div>
+
+      <div>
+        <label>Transaction Status</label>
+        <select name="transaction_status">
+          {% for x in transaction_status %}
+            <option value="{{x}}">{{x}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label>Sender Age Group</label>
+        <select name="sender_age_group">
+          {% for x in age_groups %}
+            <option value="{{x}}">{{x}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label>Receiver Age Group</label>
+        <select name="receiver_age_group">
+          {% for x in age_groups %}
+            <option value="{{x}}">{{x}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label>Sender State</label>
+        <select name="sender_state">
+          {% for x in sender_states %}
+            <option value="{{x}}">{{x}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label>Sender Bank</label>
+        <select name="sender_bank">
+          {% for x in banks %}
+            <option value="{{x}}">{{x}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label>Receiver Bank</label>
+        <select name="receiver_bank">
+          {% for x in banks %}
+            <option value="{{x}}">{{x}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label>Device Type</label>
+        <select name="device_type">
+          {% for x in device_types %}
+            <option value="{{x}}">{{x}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label>Network Type</label>
+        <select name="network_type">
+          {% for x in network_types %}
+            <option value="{{x}}">{{x}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label>Hour Of Day</label>
+        <input type="number" name="hour_of_day" value="12" min="0" max="23" required>
+      </div>
+
+      <div>
+        <label>Day Of Week</label>
+        <select name="day_of_week">
+          {% for x in days %}
+            <option value="{{x}}">{{x}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label>Is Weekend?</label>
+        <select name="is_weekend">
+          <option value="0">0</option>
+          <option value="1">1</option>
+        </select>
+      </div>
+
+    </div>
+
+    <button class="btn" type="submit"
+      onclick="this.disabled=true; this.innerText='Predicting...'; this.form.submit();">
+      Predict Fraud
+    </button>
+
+  </form>
+</div>
+
+  <!-- RIGHT: RESULTS + QUICK INSIGHTS -->
 
   <div class="card">
     <h3>Prediction Result</h3>
 
     <div class="stat-row">
-      <div class="stat">
-        <div class="k">Status</div>
-        <div class="v">{{ result if result else "-" }}</div>
-      </div>
-      <div class="stat">
-        <div class="k">Probability</div>
-        <div class="v">{{ probability if probability else "-" }}</div>
-      </div>
-      <div class="stat">
-        <div class="k">Risk Level</div>
-        <div class="v">
-          {% if risk_level %}
-            <span class="badge {{ risk_class }}">{{ risk_level }}</span>
-          {% else %}
-            -
-          {% endif %}
-        </div>
-      </div>
+
+  <div class="stat">
+    <div class="k">Transaction ID</div>
+    <div class="v">{{ saved_txn_id if saved_txn_id else "-" }}</div>
+  </div>
+
+  <div class="stat">
+    <div class="k">Status</div>
+    <div class="v">{{ result if result else "-" }}</div>
+  </div>
+
+  <div class="stat">
+    <div class="k">Probability</div>
+    <div class="v">{{ probability if probability else "-" }}</div>
+  </div>
+
+  <div class="stat">
+    <div class="k">Risk Level</div>
+    <div class="v">
+      {% if risk_level %}
+        <span class="badge {{ risk_class }}">{{ risk_level }}</span>
+      {% else %}
+        -
+      {% endif %}
     </div>
+  </div>
+
+</div>
 
     <div class="result-card">
-      <div class="small">Fraud Score Meter</div>
+      <div class="small">Fraud Scores Meter</div>
       <div class="progress">
         <div style="width: {{ progress_width }}%;"></div>
       </div>
@@ -170,8 +187,33 @@
         <p style="margin-top:12px;">{{ message }}</p>
       {% else %}
         <p class="small" style="margin-top:12px;">
-          Submit a transaction to get fraud probability and risk level.
+          Submit A Transaction To Generate Risk Scores.
         </p>
+      {% endif %}
+    </div>
+
+    <!-- Quick Fraud Signals -->
+    <div class="result-card">
+      <h4 style="margin:0 0 10px;">Quick Risk Signals</h4>
+
+      {% if signals and signals|length > 0 %}
+        <ul style="margin:0; padding-left:18px;">
+          {% for s in signals %}
+            <li style="margin-bottom:6px;">{{ s }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="small">No Suspicious Signals Detected Yet.</p>
+      {% endif %}
+    </div>
+
+    <!-- Recommended Action -->
+    <div class="result-card">
+      <h4 style="margin:0 0 10px;">Recommended Action</h4>
+      {% if action %}
+        <p style="margin:0;"><b>{{ action }}</b></p>
+      {% else %}
+        <p class="small">Prediction Required For Recommendation.</p>
       {% endif %}
     </div>
 

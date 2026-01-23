@@ -2,12 +2,13 @@
 {% block content %}
 
 <h1 class="page-title">Dashboard</h1>
-<p class="page-subtitle">Fraud analytics based on prediction history.</p>
+<p class="page-subtitle">Interactive Fraud Insights From Prediction History.</p>
 
 <div class="grid-2">
 
   <div class="card">
     <h3>Fraud Rate Summary</h3>
+
     <div class="stat-row">
       <div class="stat">
         <div class="k">Total Predictions</div>
@@ -26,7 +27,6 @@
 
   <div class="card">
     <h3>Top Fraud Patterns</h3>
-    <p class="small">Based on logged predictions</p>
 
     <table class="table">
       <thead>
@@ -36,22 +36,39 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Transaction Type</td>
-          <td>{{ top_transaction_type }}</td>
-        </tr>
-        <tr>
-          <td>Merchant Category</td>
-          <td>{{ top_merchant_category }}</td>
-        </tr>
-        <tr>
-          <td>Device Type</td>
-          <td>{{ top_device_type }}</td>
-        </tr>
+        <tr><td>Transaction Type</td><td>{{ top_transaction_type }}</td></tr>
+        <tr><td>Merchant Category</td><td>{{ top_merchant_category }}</td></tr>
+        <tr><td>Device Type</td><td>{{ top_device_type }}</td></tr>
       </tbody>
     </table>
   </div>
 
+</div>
+
+<div class="card" style="margin-top:16px;">
+  <h3>Fraud Predictions By Transaction Type</h3>
+  {% if chart_type_html %}
+    <div>{{ chart_type_html | safe }}</div>
+  {% else %}
+    <p class="small">No Chart Available Yet. Run Some Predictions First.</p>
+  {% endif %}
+</div>
+<div class="card" style="margin-top:16px;">
+  <h3>Fraud Predictions By Merchant Category</h3>
+  {% if chart_category_html %}
+    <div>{{ chart_category_html | safe }}</div>
+  {% else %}
+    <p class="small">No Chart Available Yet. Run Some Predictions First.</p>
+  {% endif %}
+</div>
+
+<div class="card" style="margin-top:16px;">
+  <h3>Fraud Probability Trends (Last 50 Predictions)</h3>
+  {% if chart_trend_html %}
+    <div>{{ chart_trend_html | safe }}</div>
+  {% else %}
+    <p class="small">No Chart Available Yet. Run Some Predictions First.</p>
+  {% endif %}
 </div>
 
 {% endblock %}

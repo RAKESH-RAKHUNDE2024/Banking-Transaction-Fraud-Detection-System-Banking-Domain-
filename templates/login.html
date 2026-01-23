@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="page-title">Admin Login</h1>
+<p class="page-subtitle">Secure Access Required For Dashboard And History.</p>
+
+<div class="card">
+  <form method="POST" action="/login">
+    <label>Username</label>
+    <input name="username" required />
+
+    <label style="margin-top:12px;">Password</label>
+    <input name="password" type="password" required />
+
+    <button class="btn" type="submit"
+      onclick="this.disabled=true; this.innerText='Signing in...'; this.form.submit();">
+      Login
+    </button>
+  </form>
+
+  {% if request.query_params.get("error") == "1" %}
+    <div class="result-card" style="margin-top:14px;">
+      ❌ Invalid Username Or Password
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}

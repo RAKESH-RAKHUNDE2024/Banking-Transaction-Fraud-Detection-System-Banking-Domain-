@@ -4,24 +4,47 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>{{ title }}</title>
+
   <link rel="stylesheet" href="/static/style.css">
+
+  <!-- Plotly JS -->
+  <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
 </head>
+
 <body>
 
   <div class="navbar">
-    <div class="brand">Banking Fraud Detection</div>
+    <div class="brand">
+      <div class="logo-dot"></div>
+      <div>
+        <div class="brand-name">Banking Transactional Fraud Detection</div>
+        <div class="brand-sub">Identify Risk • Recommend Action • Prevent Fraud</div>
+      </div>
+    </div>
 
     <div class="nav-links">
-      <a href="/">Prediction</a>
-      <a href="/batch">Batch Upload</a>
-      <a href="/dashboard">Dashboard</a>
-      <a href="/history">History</a>
+      <a href="/" class="{% if active_page=='prediction' %}active{% endif %}">Prediction</a>
+      <a href="/batch" class="{% if active_page=='batch' %}active{% endif %}">Batch Upload</a>
+      <a href="/dashboard" class="{% if active_page=='dashboard' %}active{% endif %}">Dashboard</a>
+      <a href="/history" class="{% if active_page=='history' %}active{% endif %}">History</a>
+    </div>
+
+    <div class="nav-auth">
+      {% if user %}
+        <a class="auth-btn logout" href="/logout">Logout ({{ user }})</a>
+      {% else %}
+        <a class="auth-btn login" href="/login">Login</a>
+      {% endif %}
     </div>
   </div>
 
   <div class="container">
     {% block content %}{% endblock %}
   </div>
+
+  <footer class="footer">
+    <div>© {{ current_year }} Banking Transactional Fraud Detection</div>
+  </footer>
 
 </body>
 </html>

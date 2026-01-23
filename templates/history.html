@@ -2,40 +2,59 @@
 {% block content %}
 
 <h1 class="page-title">Prediction History</h1>
-<p class="page-subtitle">Latest fraud predictions logged in real time.</p>
+<p class="page-subtitle">Latest 50 Predictions Stored In MySQL Database.</p>
 
 <div class="card">
-  <h3>Recent Predictions</h3>
+  {% if rows and rows|length > 0 %}
 
-  {% if rows %}
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Time</th>
-          <th>Type</th>
-          <th>Category</th>
-          <th>Amount</th>
-          <th>Prediction</th>
-          <th>Probability</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for r in rows %}
-        <tr>
-          <td>{{ r["timestamp"] }}</td>
-          <td>{{ r["transaction_type"] }}</td>
-          <td>{{ r["merchant_category"] }}</td>
-          <td>{{ r["amount_inr"] }}</td>
-          <td>{{ r["label"] }}</td>
-          <td>{{ r["fraud_probability"] }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="table-wrap">
+      <table class="data-table data-table-fixed">
+
+        <thead>
+          <tr>
+            <th class="col-id">TRANSACTION ID</th>
+            <th class="col-time">TIMESTAMP</th>
+            <th class="col-type">TYPE</th>
+            <th class="col-cat">CATEGORY</th>
+            <th class="col-amt">AMOUNT</th>
+            <th class="col-prob">FRAUD PROB</th>
+            <th class="col-label">LABEL</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for r in rows %}
+          <tr>
+            <td class="col-id" title="{{ r.transaction_id }}">{{ r.transaction_id }}</td>
+            <td class="col-time" title="{{ r.timestamp }}">{{ r.timestamp }}</td>
+            <td class="col-type" title="{{ r.transaction_type }}">{{ r.transaction_type }}</td>
+            <td class="col-cat" title="{{ r.merchant_category }}">{{ r.merchant_category }}</td>
+
+            <td class="col-amt" title="₹ {{ r.amount_inr }}">
+              ₹ {{ "%.0f"|format(r.amount_inr) }}
+            </td>
+
+            <td class="col-prob" title="{{ r.fraud_probability }}">
+              {{ r.fraud_probability }}
+            </td>
+
+            <td class="col-label">
+              {% if r.label == "FRAUD" %}
+                <span class="badge high">FRAUD</span>
+              {% else %}
+                <span class="badge low">NORMAL</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+
+      </table>
+    </div>
+
   {% else %}
-    <p class="small">No prediction logs found yet. Run a prediction first.</p>
+    <p class="small">No History Found Yet. Run Predictions To Generate Logs.</p>
   {% endif %}
-
 </div>
 
 {% endblock %}

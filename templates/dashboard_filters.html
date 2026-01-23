@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="page-title">Fraud Analytics Dashboard</h1>
+<p class="page-subtitle">Filter Predictions And Analyze Fraud Patterns (Bar + Donuts + Trends).</p>
+
+<div class="card">
+  <h3>Filters</h3>
+
+  <form method="GET" action="/dashboard" class="form-grid">
+
+    <div>
+      <label>Start Date</label>
+      <input type="date" name="start_date" value="{{ request.query_params.get('start_date','') }}">
+    </div>
+
+    <div>
+      <label>End Date</label>
+      <input type="date" name="end_date" value="{{ request.query_params.get('end_date','') }}">
+    </div>
+
+    <div>
+      <label>Transaction Type</label>
+      <select name="txn_type">
+        {% for t in transaction_types %}
+          <option value="{{t}}" {% if request.query_params.get('txn_type','ALL') == t %}selected{% endif %}>
+            {{t}}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div>
+      <label>Fraud Filter</label>
+      <select name="fraud_only">
+        <option value="ALL" {% if request.query_params.get('fraud_only','ALL') == 'ALL' %}selected{% endif %}>ALL</option>
+        <option value="FRAUD" {% if request.query_params.get('fraud_only','ALL') == 'FRAUD' %}selected{% endif %}>FRAUD</option>
+        <option value="NORMAL" {% if request.query_params.get('fraud_only','ALL') == 'NORMAL' %}selected{% endif %}>NORMAL</option>
+      </select>
+    </div>
+
+    <div style="grid-column: span 3;">
+      <button class="btn" type="submit">Apply Filters</button>
+    </div>
+
+  </form>
+</div>
+
+<div class="grid-2" style="margin-top:16px;">
+
+  <div class="card summary-card">
+    <h3>Summary</h3>
+
+    <div class="stat-row" style="margin-top:10px;">
+      <div class="stat glow-blue">
+        <div class="k">Total Predictions</div>
+        <div class="v">{{ total_predictions }}</div>
+      </div>
+
+      <div class="stat glow-pink">
+        <div class="k">Fraud Count</div>
+        <div class="v">{{ fraud_count }}</div>
+      </div>
+
+      <div class="stat glow-green">
+        <div class="k">Fraud %</div>
+        <div class="v">{{ fraud_rate }}%</div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;">
+      <a class="link-btn" href="/download-history">Download History CSV</a>
+    </div>
+  </div>
+
+  <div class="card insights-card">
+    <h3>Insights</h3>
+    <p class="small">
+      This Dashboard Updates Dynamically Based On Your Filters:
+      <br><br>
+      <b>• Date Range</b> Helps Track Fraud Spikes<br>
+      <b>• Transaction Type</b> Highlights Risky Channels (Bill Payment/Recharge/P2P/P2M.)<br>
+      <b>• Fraud Filter</b> Isolates Fraud Only Patterns For Investigation
+    </p>
+
+    <div class="mini-tags">
+      <span class="tag tag1">Risk Monitoring</span>
+      <span class="tag tag2">Fraud Signals</span>
+      <span class="tag tag3">Trend Analysis</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="grid-2" style="margin-top:16px;">
+  <div class="card">
+    <h3>Transaction Type</h3>
+    {% if chart_type_bar %}
+      {{ chart_type_bar | safe }}
+    {% else %}
+      <p class="small">No Records Found For This Filter.</p>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h3>Merchant Category</h3>
+    {% if chart_category_pie %}
+      {{ chart_category_pie | safe }}
+    {% else %}
+      <p class="small">No Records Found For This Filter.</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px;">
+  <h3>Fraud Probability Trends</h3>
+  {% if chart_trend_line %}
+    {{ chart_trend_line | safe }}
+  {% else %}
+    <p class="small">No Records Found For This Filter.</p>
+  {% endif %}
+</div>
+
+{% endblock %}
