@@ -35,7 +35,13 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 BATCH_OUTPUT_PATH = os.path.join(OUTPUT_DIR, "batch_predictions_output.csv")
 EXPORT_HISTORY_PATH = os.path.join(OUTPUT_DIR, "prediction_history_export.csv")
 
-Base.metadata.create_all(bind=engine)
+@app.on_event("startup")
+def startup_event():
+    try:
+        Base.metadata.create_all(bind=engine)
+        print("MySQL Connected + Tables Ready")
+    except Exception as e:
+        print("❌ MySQL Startup Connection Failed:", e)
 
 
 # ============================================================
@@ -692,4 +698,5 @@ def download_history(request: Request):
         return FileResponse(EXPORT_HISTORY_PATH, filename="prediction_history_export.csv", media_type="text/csv")
 
     finally:
+
         db.close()
