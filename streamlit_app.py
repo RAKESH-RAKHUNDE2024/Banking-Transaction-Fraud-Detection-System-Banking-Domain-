@@ -8,7 +8,7 @@ st.title("Banking Transactional Fraud Detection (Fixed Streamlit App)")
 st.write("Fill transaction details below and click **Predict Fraud**.")
 
 # =========================================================
-# ✅ Hardcoded dropdown values (100% match your dataset)
+# Hardcoded dropdown values (100% match your dataset)
 # =========================================================
 TRANSACTION_TYPES = ["P2P", "P2M", "Bill Payment", "Recharge"]
 
@@ -36,7 +36,7 @@ DAYS_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturda
 
 
 # =========================================================
-# ✅ UI Inputs
+# UI Inputs
 # =========================================================
 transaction_type = st.selectbox("Transaction Type", TRANSACTION_TYPES)
 merchant_category = st.selectbox("Merchant Category", MERCHANT_CATEGORIES)
@@ -61,14 +61,14 @@ day_of_week = st.selectbox("Day of Week", DAYS_OF_WEEK)
 is_weekend = st.selectbox("Is Weekend?", [0, 1])
 
 # =========================================================
-# ✅ Feature Engineering (same like EDA)
+# Feature Engineering (same like EDA)
 # =========================================================
 amount_log = float(np.log1p(amount_inr))
 same_bank_transfer = int(sender_bank == receiver_bank)
 is_night = int(0 <= hour_of_day <= 6)
 
 # =========================================================
-# ✅ Build input for model (final features)
+# Build input for model (final features)
 # =========================================================
 input_data = {
     "transaction_type": transaction_type,
@@ -96,7 +96,7 @@ with st.expander("Show Input Sent to Model (Debug)"):
     st.write(input_data)
 
 # =========================================================
-# ✅ Prediction Button
+# Prediction Button
 # =========================================================
 if st.button("Predict Fraud"):
     st.subheader("Prediction Result")
@@ -104,16 +104,16 @@ if st.button("Predict Fraud"):
     # 1) Check model file exists
     model_path = "check.model"
     if not os.path.exists(model_path):
-        st.error("❌ Model file not found: check.model")
-        st.info("✅ First run model training using: python run_training.py")
+        st.error("Model file not found: check.model")
+        st.info("First run model training using: python run_training.py")
         st.stop()
 
     # 2) Import PredictionPipeline safely
     try:
         from transaction.prediction.prediction_pipeline import PredictionPipeline
     except Exception as e:
-        st.error("❌ PredictionPipeline import failed.")
-        st.info("✅ Make sure you have these files:")
+        st.error("PredictionPipeline import failed.")
+        st.info("Make sure you have these files:")
         st.code(
             "transaction/__init__.py\n"
             "transaction/prediction/__init__.py\n"
@@ -128,10 +128,10 @@ if st.button("Predict Fraud"):
         pred, proba = pipeline.predict(input_data)
 
         if pred == 1:
-            st.error(f"🚨 Fraud Detected | Probability: {proba:.2f}")
+            st.error(f"Fraud Detected | Probability: {proba:.2f}")
         else:
-            st.success(f"✅ Normal Transaction | Fraud Probability: {proba:.2f}")
+            st.success(f"Normal Transaction | Fraud Probability: {proba:.2f}")
 
     except Exception as e:
-        st.error("❌ Prediction failed due to an internal error.")
+        st.error("Prediction failed due to an internal error.")
         st.exception(e)

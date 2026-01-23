@@ -9,5 +9,13 @@ uvicorn
 pydantic
 jinja2
 python-multipart
+plotly 
+shap 
+sqlalchemy
+mysql-connector-python
+python-jose
+passlib[bcrypt]
+python-dotenv
+shap 
 
 
