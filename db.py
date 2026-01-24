@@ -1,18 +1,30 @@
 import os
-from dotenv import load_dotenv
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.orm import sessionmaker
 
-load_dotenv()
+def get_database_url():
+    """
+    Render provides DATABASE_URL like:
+    postgresql://user:pass@host:5432/dbname
 
-MYSQL_USER = os.getenv("MYSQL_USER", "root")
-MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD", "root")
-MYSQL_HOST = os.getenv("MYSQL_HOST", "localhost")
-MYSQL_PORT = os.getenv("MYSQL_PORT", "3306")
-MYSQL_DB = os.getenv("MYSQL_DB", "fraud_db")
+    SQLAlchemy expects:
+    postgresql+psycopg2://user:pass@host:5432/dbname
+    """
+    database_url = os.getenv("DATABASE_URL")
 
-DATABASE_URL = f"mysql+mysqlconnector://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DB}"
+    if not database_url:
+        raise ValueError("DATABASE_URL environment variable is not set.")
 
-engine = create_engine(DATABASE_URL, echo=False)
+    # Fix scheme for SQLAlchemy
+    if database_url.startswith("postgres://"):
+        database_url = database_url.replace("postgres://", "postgresql+psycopg2://", 1)
+    elif database_url.startswith("postgresql://"):
+        database_url = database_url.replace("postgresql://", "postgresql+psycopg2://", 1)
+
+    return database_url
+
+engine = create_engine(get_database_url(), pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+
+def get_db_session():
+    return SessionLocal()
