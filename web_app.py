@@ -22,11 +22,6 @@ from auth import verify_admin, create_access_token, decode_token
 # APP INIT
 # ============================================================
 app = FastAPI(title="Banking Transactional Fraud Detection")
-from db import engine
-from models import Base
-
-Base.metadata.create_all(bind=engine)
-
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -697,5 +692,4 @@ def download_history(request: Request):
         return FileResponse(EXPORT_HISTORY_PATH, filename="prediction_history_export.csv", media_type="text/csv")
 
     finally:
-
         db.close()
