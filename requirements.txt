@@ -12,10 +12,13 @@ python-multipart
 plotly 
 shap 
 sqlalchemy
-mysql-connector-python
 python-jose
 passlib[bcrypt]
 python-dotenv
 shap 
+psycopg2-binary
+SQLAlchemy
+gunicorn
+
 
 
