@@ -2,8 +2,8 @@ import os
 import joblib
 import numpy as np
 import pandas as pd
-
-
+from datetime import datetime
+import pytz
 import plotly.express as px
 
 from fastapi import FastAPI, Request, Form, UploadFile, File
@@ -187,6 +187,12 @@ def recommended_action(prob: float) -> str:
 # DB LOGGING
 # ============================================================
 
+IST = pytz.timezone("Asia/Kolkata")
+
+def get_ist_now():
+    return datetime.now(IST).replace(tzinfo=None)  # Store IST Time In MySQL
+
+
 def log_prediction_mysql(payload: dict, label: str, proba: float, risk_level: str):
     db = SessionLocal()
     try:
@@ -211,11 +217,14 @@ def log_prediction_mysql(payload: dict, label: str, proba: float, risk_level: st
             is_weekend=int(payload["is_weekend"]),
             label=label,
             fraud_probability=round(float(proba), 4),
-            risk_level=risk_level
+            risk_level=risk_level,
+            created_at=get_ist_now()
+
         )
 
         db.add(row)
         db.commit()
+        
 
         # Return Transaction ID So It Can Show In Prediction Result
         return txn_id
@@ -637,6 +646,27 @@ def dashboard_page(
 # ============================================================
 # HISTORY + EXPORT
 # ============================================================
+   
+IST = pytz.timezone("Asia/Kolkata")
+
+def to_ist(dt: datetime):
+    """
+    Convert DB datetime to IST.
+    Works for both naive and timezone-aware datetimes.
+    """
+    if dt is None:
+        return None
+
+    # If Datetime Is Naive, Assume It Is UTC (Common In DB)
+    if dt.tzinfo is None:
+        dt = pytz.utc.localize(dt)
+
+    return dt.astimezone(IST)
+
+
+# ============================================================
+# HISTORY + EXPORT
+# ============================================================
 @app.get("/history", response_class=HTMLResponse)
 def history_page(request: Request):
     auth_redirect = require_login(request)
@@ -649,15 +679,17 @@ def history_page(request: Request):
     try:
         logs = db.query(PredictionLog).order_by(PredictionLog.id.desc()).limit(50).all()
         for r in logs:
+            ist_time = to_ist(r.created_at)
+
             rows.append({
-    "transaction_id": r.transaction_id,
-    "timestamp": r.created_at.strftime("%Y-%m-%d %H:%M:%S") if r.created_at else "-",
-    "transaction_type": r.transaction_type,
-    "merchant_category": r.merchant_category,
-    "amount_inr": r.amount_inr,
-    "label": r.label,
-    "fraud_probability": r.fraud_probability, 
-     })
+                "transaction_id": r.transaction_id,
+                "timestamp": ist_time.strftime("%Y-%m-%d %H:%M:%S") if ist_time else "-",
+                "transaction_type": r.transaction_type,
+                "merchant_category": r.merchant_category,
+                "amount_inr": r.amount_inr,
+                "label": r.label,
+                "fraud_probability": r.fraud_probability,
+            })
     finally:
         db.close()
 
@@ -676,7 +708,10 @@ def download_history(request: Request):
 
         df = pd.DataFrame([{
             "transaction_id": r.transaction_id,
-            "created_at": r.created_at,
+
+            # FIXED (Export Time Will Also Be IST Now)
+            "created_at": to_ist(r.created_at).strftime("%Y-%m-%d %H:%M:%S") if r.created_at else None,
+
             "transaction_type": r.transaction_type,
             "merchant_category": r.merchant_category,
             "amount_inr": r.amount_inr,
